@@ -24,8 +24,6 @@ jobs:
             -t philipempl/ollama:llama2 \
             -f Dockerfile .
           docker buildx stop
-        env:
-          DOCKER_CLI_ACI=1  # Enable the Docker CLI with experimental features
 
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USER_NAME }} -p ${{ secrets.DOCKER_ACCESS_TOKEN }}
