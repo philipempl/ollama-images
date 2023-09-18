@@ -1,0 +1,38 @@
+name: Docker Build and Publish Ollama Llama2 
+
+on:
+  push:
+    branches:
+      - main  # Change this to your main branch name
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build Docker image
+        run: |
+          docker buildx create --use
+          docker buildx build \
+            --platform linux/amd64,linux/arm64 \
+            -t philipempl/ollama:llama2 \
+            -f Dockerfile .
+          docker buildx stop
+        env:
+          DOCKER_CLI_ACI=1  # Enable the Docker CLI with experimental features
+
+      - name: Login to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_USER_NAME }} -p ${{ secrets.DOCKER_ACCESS_TOKEN }}
+
+      - name: Push Docker image to Docker Hub
+        run: docker push philipempl/ollama:llama2
+
+      - name: Clean up
+        run: docker logout
+
