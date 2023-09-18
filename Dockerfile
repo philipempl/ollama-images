@@ -23,9 +23,6 @@ ENV OLLAMA_HOST "0.0.0.0"
 RUN apk add --no-cache libstdc++ curl
 
 # Copy the custom entry point script into the container
-COPY Modelfile /Modelfile
-
-# Copy the custom entry point script into the container
 COPY entrypoint.sh /entrypoint.sh
 
 # Make the script executable
